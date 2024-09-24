@@ -17,14 +17,20 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .yasg import schema_view
-from debug_toolbar.toolbar import debug_toolbar_urls
+from django.conf.urls.i18n import i18n_patterns
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    # Include Django's language-switching URLs
+    path('i18n/', include('django.conf.urls.i18n')),
 
 
     # ==================== Swagger and Redoc ====================
     path ( '' , schema_view.with_ui ( 'swagger' , cache_timeout = 0 ) , name = 'schema-swagger-ui' ) ,
     path ( 'redoc/' , schema_view.with_ui ( 'redoc' , cache_timeout = 0 ) , name = 'schema-redoc' ) ,
 
-] + debug_toolbar_urls()
+]
+
+# Add admin URL pattern as well
+urlpatterns += i18n_patterns(
+    path('admin/', admin.site.urls),
+)
